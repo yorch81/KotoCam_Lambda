@@ -21,7 +21,37 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
+/**
+ * LambdaMethodHandler<br>
+ * 
+ * LambdaMethodHandler Java implementation for AWS Lambda<br><br>
+ * 
+ * Copyright 2020 Jorge Alberto Ponce Turrubiates
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ * @version    1.0.0, 2020-17-06
+ * @author     <a href="mailto:the.yorch@gmail.com">Jorge Alberto Ponce Turrubiates</a>
+ */
 public class LambdaMethodHandler implements RequestHandler<InputImg, OutImg> {
+	
+	/**
+	 * Entry point for Lambda
+	 * 
+	 * @param input Input for Lambda Function
+	 * @param context Context for Lambda Function
+	 * @return OutImg Lambda response
+	 */
 	@Override
 	public OutImg handleRequest(InputImg input, Context context) {
         Regions clientRegion = Regions.US_EAST_2;
@@ -61,7 +91,7 @@ public class LambdaMethodHandler implements RequestHandler<InputImg, OutImg> {
             
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType("image/png");
-            metadata.addUserMetadata("KotoCam", "Solarize");
+            metadata.addUserMetadata("KotoCam", filter);
             metadata.setContentLength(buffer.length);
             PutObjectRequest request = new PutObjectRequest(bucketName, fileObjKeyName, is, metadata);
             

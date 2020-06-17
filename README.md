@@ -16,7 +16,7 @@ JavaDoc.
 Deploy in AWS Lambda
 
 ## Notes ##
-Create Environment Variables: AWS_KEY & AWS_SECRET.
+Create Environment Variables for AWS Access: AWS_KEY & AWS_SECRET.
 
 Create S3 Bucket for generated images.
 

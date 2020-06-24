@@ -59,7 +59,9 @@ public class LambdaMethodHandler implements RequestHandler<InputImg, OutImg> {
         String filter = input.getFilter();
         int scale = Integer.valueOf(input.getScale()).intValue();
         String fileObjKeyName = filter + "_" +  UtilImg.getFileName();
-                
+        
+        OutImg s3Image = new OutImg();
+        
         try {
         	String awsKey = System.getenv("AWS_KEY");
         	String awsSecret = System.getenv("AWS_SECRET");
@@ -78,34 +80,40 @@ public class LambdaMethodHandler implements RequestHandler<InputImg, OutImg> {
             
             // Apply filter
             KotoFilter kf = new KotoFilter(filter);
-            image = kf.process(image, scale);
             
-            // Write s3
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            
-            ImageIO.write(image, "png", os);
-            
-            byte[] buffer = os.toByteArray();
-            
-            InputStream is = new ByteArrayInputStream(buffer);
-            
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType("image/png");
-            metadata.addUserMetadata("KotoCam", filter);
-            metadata.setContentLength(buffer.length);
-            PutObjectRequest request = new PutObjectRequest(bucketName, fileObjKeyName, is, metadata);
-            
-            s3Client.putObject(request.withCannedAcl(CannedAccessControlList.PublicRead));
+            if (kf.isLoaded()) {
+            	image = kf.process(image, scale);
+            	s3Image.setS3Img(UtilImg.getUrlS3() + fileObjKeyName);
+            	
+            	// Write s3
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                
+                ImageIO.write(image, "png", os);
+                
+                byte[] buffer = os.toByteArray();
+                
+                InputStream is = new ByteArrayInputStream(buffer);
+                
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentType("image/png");
+                metadata.addUserMetadata("KotoCam", filter);
+                metadata.setContentLength(buffer.length);
+                PutObjectRequest request = new PutObjectRequest(bucketName, fileObjKeyName, is, metadata);
+                
+                s3Client.putObject(request.withCannedAcl(CannedAccessControlList.PublicRead));
+            }
+            else
+            	s3Image.setS3Img("The selected filter does not exists");
         } catch (AmazonServiceException e) {
+        	s3Image.setS3Img(e.getMessage());
         	context.getLogger().log(e.getMessage());
         } catch (SdkClientException e) {
+        	s3Image.setS3Img(e.getMessage());
         	context.getLogger().log(e.getMessage());
         }  catch (IOException e) {
+        	s3Image.setS3Img(e.getMessage());
         	context.getLogger().log(e.getMessage());
         }
-        
-        OutImg s3Image = new OutImg();
-        s3Image.setS3Img(UtilImg.getUrlS3() + fileObjKeyName);
         
         return s3Image;
     }

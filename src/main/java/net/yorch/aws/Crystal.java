@@ -2,12 +2,14 @@ package net.yorch.aws;
 
 import java.awt.image.BufferedImage;
 
+import com.jhlabs.image.CrystallizeFilter;
+
 /**
- * KotoFilter<br>
+ * Crystal<br>
  * 
- * KotoFilter Implementation of Filter<br><br>
+ * Crystal Implementation of Filter<br><br>
  * 
- * Copyright 2015 Jorge Alberto Ponce Turrubiates
+ * Copyright 2020 Jorge Alberto Ponce Turrubiates
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,48 +23,27 @@ import java.awt.image.BufferedImage;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * @version    1.0.0, 2015-17-03
+ * @version    1.0.0, 2020-24-06
  * @author     <a href="mailto:the.yorch@gmail.com">Jorge Alberto Ponce Turrubiates</a>
  */
-public class KotoFilter {
+public class Crystal extends Filter{
 
-	/**
-	 * Filter
-	 */
-	Filter _filter = null;
-	
-	/**
-	 * Constructor of Class
-	 * 
-	 * @param filter String Filter Name
-	 */
-	public KotoFilter(String filter) {
-		String className = this.getClass().getPackage().toString().replace("package ", "") + "." + filter;
-		
-		Class<?> classFilter;
-		
-		try {
-			classFilter = Class.forName(className);
-			_filter = (Filter) classFilter.newInstance();
-		} catch (Exception e) {
-			_filter = null;
-			e.printStackTrace();
-		}
-	}
-	
 	/**
 	 * Apply Filter to BufferedImage
 	 * 
 	 * @param img BufferedImage Original Image
 	 * @return BufferedImage Processed Image
 	 */
+	@Override
 	public BufferedImage process(BufferedImage img) {
-		if (_filter != null)
-			return _filter.process(img);
-		else
-			return null;
+		CrystallizeFilter filter = new CrystallizeFilter();
+		BufferedImage imgFilter = filter.filter(img, null);
+		
+		filter = null;
+		
+		return imgFilter;
 	}
-	
+
 	/**
 	 * Apply Filter to BufferedImage with Scale Percent
 	 * 
@@ -70,24 +51,8 @@ public class KotoFilter {
 	 * @param scale int Percent 0 to 100
 	 * @return BufferedImage Processed Image
 	 */
-	public BufferedImage process(BufferedImage img, int scale) {
-		if (_filter != null)
-			return _filter.process(img, scale);
-		else
-			return null;
-	}
-	
-	/**
-	 * Return true if Filter is loaded
-	 * 
-	 * @return boolean
-	 */
-	public boolean isLoaded() {
-		if (_filter == null) {
-			return false;
-		}
-		
-		return true;
+	@Override
+	public BufferedImage process(BufferedImage img, int scale) {		
+		return process(img);
 	}
 }
-

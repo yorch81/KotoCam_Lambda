@@ -34,6 +34,16 @@ MixGreen
 MixRed
 Solarize
 Tritone
+Poster
+Optimize
+Points
+Stained
+Glass
+Kaleidoscope
+Mirror
+Polar
+Noise
+DoG
 ~~~
 
 ## Testing ##

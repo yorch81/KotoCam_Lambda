@@ -1,5 +1,11 @@
 package net.yorch.aws;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 /**
  * App<br>
  * 
@@ -29,6 +35,26 @@ public class App {
 	 * @param args String[]
 	 */
     public static void main( String[] args ) {
-        System.out.println( "Hello KotoCam on AWS !!!" );
+        System.out.println("Hello KotoCam on AWS !!!");
+        
+        try {
+	        BufferedImage image = ImageIO.read(new File("C:/Code/img/mory.jpg"));
+	        
+	        KotoFilter kf = new KotoFilter("DoG");
+	        
+	        if (kf.isLoaded()) {
+	        	BufferedImage imgTmp = kf.process(image, 30);
+	        	
+	        	String fileName = "C:/Code/img/kotocam_" + UtilImg.getFileName();;
+				
+				File imgFile = new File(fileName);
+				
+				ImageIO.write(imgTmp, "png", imgFile);
+				
+				System.out.println("Generated image: " + fileName);
+	        }
+        } catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 }

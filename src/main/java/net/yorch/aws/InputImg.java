@@ -36,7 +36,7 @@ public class InputImg {
 	/**
 	 * Filter scale 0 - 100
 	 */
-	String scale;
+	int scale;
 	
 	/**
 	 * Gets filter name
@@ -77,18 +77,18 @@ public class InputImg {
 	/**
 	 * Gets scale image
 	 * 
-	 * @return String
+	 * @return int
 	 */
-	public String getScale() {
+	public int getScale() {
 		return scale;
 	}
 	
 	/**
 	 * Sets scale image
 	 * 
-	 * @param scale String
+	 * @param scale int
 	 */
-	public void setScale(String scale) {
+	public void setScale(int scale) {
 		this.scale = scale;
 	}
 }

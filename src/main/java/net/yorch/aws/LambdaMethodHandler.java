@@ -63,6 +63,8 @@ public class LambdaMethodHandler implements RequestHandler<InputImg, OutImg> {
         OutImg s3Image = new OutImg();
         
         try {
+        	/*
+        	// With Environment Credentials
         	String awsKey = System.getenv("AWS_KEY");
         	String awsSecret = System.getenv("AWS_SECRET");
         	
@@ -72,6 +74,9 @@ public class LambdaMethodHandler implements RequestHandler<InputImg, OutImg> {
                                     .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
                                     .withRegion(clientRegion)
                                     .build();
+            */
+            
+            AmazonS3 s3Client = AmazonS3ClientBuilder.defaultClient();
             
             // Convert String to BufferredImage
             String imageString = input.getImg();

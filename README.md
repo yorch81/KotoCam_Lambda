@@ -16,7 +16,7 @@ Execute mvn javadoc:javadoc
 Deploy in AWS Lambda
 
 ## Notes ##
-Create Environment Variables for AWS Access: AWS_KEY & AWS_SECRET.
+Add IAM politic: AmazonS3FullAccess
 
 Create S3 Bucket for generated images.
 
